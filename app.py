@@ -14,7 +14,7 @@ st.set_page_config(
 
 
 # -----------------------------
-# UI STYLING
+# CSS
 # -----------------------------
 st.markdown("""
 <style>
@@ -28,7 +28,8 @@ st.markdown("""
         padding-bottom: 2rem;
     }
 
-    h1, h2, h3, h4, h5, h6, p, label, span, div {
+    /* Only style text elements directly, not all divs */
+    h1, h2, h3, h4, h5, h6, p, label, span {
         color: #111827 !important;
     }
 
@@ -144,24 +145,52 @@ st.markdown("""
         color: #111827 !important;
     }
 
-    /* Select box fix */
+    .stTextArea textarea::placeholder {
+        color: #6b7280 !important;
+    }
+
+    /* Select widget outer box */
     div[data-baseweb="select"] > div {
         background-color: #1f2937 !important;
-        color: #ffffff !important;
         border: 1px solid #d1d5db !important;
         border-radius: 12px !important;
     }
 
-    div[data-baseweb="select"] span {
+    /* Selected value container */
+    div[data-baseweb="select"] div {
         color: #ffffff !important;
     }
 
+    /* Specifically target the selected text */
+    div[data-baseweb="select"] span,
+    div[data-baseweb="select"] p,
+    div[data-baseweb="select"] input,
+    div[data-baseweb="select"] div[role="button"] {
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
+    }
+
+    /* Dropdown arrow */
+    div[data-baseweb="select"] svg {
+        fill: #ffffff !important;
+        color: #ffffff !important;
+    }
+
+    /* Dropdown menu */
     div[role="listbox"] {
+        background-color: #1f2937 !important;
+        border: 1px solid #374151 !important;
+    }
+
+    /* Dropdown options */
+    div[role="option"] {
+        color: #ffffff !important;
         background-color: #1f2937 !important;
     }
 
-    div[role="option"] {
+    div[role="option"] * {
         color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
     }
 
     div[role="option"]:hover {
@@ -331,7 +360,7 @@ with st.form("fitness_form"):
 
         st.markdown('<div class="section-card">', unsafe_allow_html=True)
         st.subheader("ℹ️ Clarity")
-        st.caption("This version keeps the simpler working app logic and the original card-based UI style.")
+        st.caption("This version is focused on readability, working dropdown text, and the original card-based UI.")
         st.markdown('</div>', unsafe_allow_html=True)
 
     submitted = st.form_submit_button("Generate Plan")
