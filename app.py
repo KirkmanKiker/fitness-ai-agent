@@ -28,7 +28,6 @@ st.markdown("""
         padding-bottom: 2rem;
     }
 
-    /* Only style text elements directly, not all divs */
     h1, h2, h3, h4, h5, h6, p, label, span {
         color: #111827 !important;
     }
@@ -103,12 +102,13 @@ st.markdown("""
         line-height: 1.35;
     }
 
-    .plan-card {
+    .plan-shell {
         background: white;
         border: 1px solid #dbeafe;
         border-radius: 18px;
         padding: 1rem;
         box-shadow: 0 5px 16px rgba(37, 99, 235, 0.07);
+        margin-top: 0.8rem;
     }
 
     .small-note {
@@ -149,40 +149,27 @@ st.markdown("""
         color: #6b7280 !important;
     }
 
-    /* Select widget outer box */
+    /* Select box styling */
     div[data-baseweb="select"] > div {
         background-color: #1f2937 !important;
         border: 1px solid #d1d5db !important;
         border-radius: 12px !important;
     }
 
-    /* Selected value container */
-    div[data-baseweb="select"] div {
-        color: #ffffff !important;
-    }
-
-    /* Specifically target the selected text */
-    div[data-baseweb="select"] span,
-    div[data-baseweb="select"] p,
-    div[data-baseweb="select"] input,
-    div[data-baseweb="select"] div[role="button"] {
+    div[data-baseweb="select"] * {
         color: #ffffff !important;
         -webkit-text-fill-color: #ffffff !important;
     }
 
-    /* Dropdown arrow */
     div[data-baseweb="select"] svg {
         fill: #ffffff !important;
-        color: #ffffff !important;
     }
 
-    /* Dropdown menu */
     div[role="listbox"] {
         background-color: #1f2937 !important;
         border: 1px solid #374151 !important;
     }
 
-    /* Dropdown options */
     div[role="option"] {
         color: #ffffff !important;
         background-color: #1f2937 !important;
@@ -202,6 +189,18 @@ st.markdown("""
         border: 1px solid #dbeafe;
         border-radius: 14px;
         padding: 0.35rem 0.7rem;
+    }
+
+    /* Make generated markdown fully visible */
+    [data-testid="stMarkdownContainer"] p,
+    [data-testid="stMarkdownContainer"] li,
+    [data-testid="stMarkdownContainer"] ul,
+    [data-testid="stMarkdownContainer"] ol,
+    [data-testid="stMarkdownContainer"] strong,
+    [data-testid="stMarkdownContainer"] em,
+    [data-testid="stMarkdownContainer"] code {
+        color: #111827 !important;
+        opacity: 1 !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -225,7 +224,7 @@ def get_client():
 # -----------------------------
 # CALCULATIONS
 # -----------------------------
-def calc_targets(weight, height_ft, height_in, age, sex, activity, goal):
+def calc_targets(weight: float, height_ft: int, height_in: int, age: int, sex: str, activity: str, goal: str):
     kg = weight * 0.453592
     cm = ((height_ft * 12) + height_in) * 2.54
 
@@ -238,7 +237,7 @@ def calc_targets(weight, height_ft, height_in, age, sex, activity, goal):
         "Sedentary": 1.2,
         "Light": 1.375,
         "Moderate": 1.55,
-        "Very Active": 1.725
+        "Very Active": 1.725,
     }[activity]
 
     tdee = bmr * mult
@@ -259,7 +258,7 @@ def calc_targets(weight, height_ft, height_in, age, sex, activity, goal):
 # -----------------------------
 # PROMPT
 # -----------------------------
-def build_prompt(data, bmr, tdee, cal, protein_low, protein_high):
+def build_prompt(data: dict, bmr: int, tdee: int, cal: int, protein_low: int, protein_high: int) -> str:
     return f"""
 You are a realistic fitness coach writing a plan inside a fitness app.
 
@@ -360,7 +359,7 @@ with st.form("fitness_form"):
 
         st.markdown('<div class="section-card">', unsafe_allow_html=True)
         st.subheader("ℹ️ Clarity")
-        st.caption("This version is focused on readability, working dropdown text, and the original card-based UI.")
+        st.caption("This version prioritizes readable dropdown text and visible generated workout details.")
         st.markdown('</div>', unsafe_allow_html=True)
 
     submitted = st.form_submit_button("Generate Plan")
@@ -443,7 +442,7 @@ It adds normal movement and activity on top of your BMR.
         "experience": experience,
         "equipment": equipment,
         "days": days,
-        "injuries": injuries
+        "injuries": injuries,
     }
 
     client = get_client()
@@ -455,12 +454,14 @@ It adds normal movement and activity on top of your BMR.
             try:
                 response = client.responses.create(
                     model="gpt-5.4-mini",
-                    input=build_prompt(data, bmr, tdee, cal, protein_low, protein_high)
+                    input=build_prompt(data, bmr, tdee, cal, protein_low, protein_high),
                 )
 
-                st.markdown('<div class="plan-card">', unsafe_allow_html=True)
+                plan_text = response.output_text
+
+                st.markdown('<div class="plan-shell">', unsafe_allow_html=True)
                 st.subheader(f"{name.strip() if name.strip() else 'Your'} Personalized Plan")
-                st.markdown(response.output_text)
+                st.markdown(plan_text)
                 st.markdown('</div>', unsafe_allow_html=True)
 
             except Exception as e:
