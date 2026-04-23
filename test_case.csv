@@ -1,0 +1,11 @@
+case_id,age,sex,activity_level,goal,notes
+1,21,Male,Low,Lose fat,Beginner low activity
+2,30,Female,Moderate,Maintain weight,Consistent gym user
+3,18,Male,High,Build muscle,Athlete training frequently
+4,45,Female,Low,Lose fat,Sedentary lifestyle
+5,25,Male,Moderate,Maintain weight,Minor shoulder injury
+6,35,Female,Moderate,Build muscle,Vegetarian diet
+7,28,Male,High,Build muscle,Training 6-7 days/week
+8,50,Male,Low,Lose fat,Low activity older user
+9,22,Female,Moderate,Maintain weight,Budget focused diet
+10,40,Male,Low,Improve fitness,Limited workout time
