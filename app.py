@@ -14,7 +14,7 @@ st.set_page_config(
 
 
 # -----------------------------
-# STYLED UI
+# UI STYLING
 # -----------------------------
 st.markdown("""
 <style>
@@ -123,7 +123,7 @@ st.markdown("""
         color: white !important;
         border: none !important;
         border-radius: 14px !important;
-        padding: 0.75rem 1.2rem !important;
+        padding: 0.78rem 1.2rem !important;
         font-weight: 700 !important;
         box-shadow: 0 8px 18px rgba(37, 99, 235, 0.16) !important;
         width: 100%;
@@ -140,11 +140,32 @@ st.markdown("""
     .stTextArea textarea {
         border-radius: 12px !important;
         border: 1px solid #d1d5db !important;
+        background-color: #ffffff !important;
+        color: #111827 !important;
     }
 
+    /* Select box fix */
     div[data-baseweb="select"] > div {
-        border-radius: 12px !important;
+        background-color: #1f2937 !important;
+        color: #ffffff !important;
         border: 1px solid #d1d5db !important;
+        border-radius: 12px !important;
+    }
+
+    div[data-baseweb="select"] span {
+        color: #ffffff !important;
+    }
+
+    div[role="listbox"] {
+        background-color: #1f2937 !important;
+    }
+
+    div[role="option"] {
+        color: #ffffff !important;
+    }
+
+    div[role="option"]:hover {
+        background-color: #374151 !important;
     }
 
     details {
@@ -310,7 +331,7 @@ with st.form("fitness_form"):
 
         st.markdown('<div class="section-card">', unsafe_allow_html=True)
         st.subheader("ℹ️ Clarity")
-        st.caption("This version keeps the simpler working app logic, but uses the more styled layout from your original UI.")
+        st.caption("This version keeps the simpler working app logic and the original card-based UI style.")
         st.markdown('</div>', unsafe_allow_html=True)
 
     submitted = st.form_submit_button("Generate Plan")
@@ -403,14 +424,14 @@ It adds normal movement and activity on top of your BMR.
     else:
         with st.spinner("Building your plan..."):
             try:
-                res = client.responses.create(
-                    model="gpt-5.4",
+                response = client.responses.create(
+                    model="gpt-5.4-mini",
                     input=build_prompt(data, bmr, tdee, cal, protein_low, protein_high)
                 )
 
                 st.markdown('<div class="plan-card">', unsafe_allow_html=True)
                 st.subheader(f"{name.strip() if name.strip() else 'Your'} Personalized Plan")
-                st.markdown(res.output_text)
+                st.markdown(response.output_text)
                 st.markdown('</div>', unsafe_allow_html=True)
 
             except Exception as e:
