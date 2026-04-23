@@ -4,7 +4,7 @@ from openai import OpenAI
 
 
 # -----------------------------
-# Page Config
+# PAGE CONFIG
 # -----------------------------
 st.set_page_config(
     page_title="AI Fitness Agent",
@@ -14,12 +14,12 @@ st.set_page_config(
 
 
 # -----------------------------
-# DARK ACCESSIBLE THEME
+# STYLING
 # -----------------------------
 st.markdown("""
 <style>
     .stApp {
-        background-color: #0b0b0f;
+        background: #0a0a0d;
         color: #f5f5f5;
     }
 
@@ -34,136 +34,148 @@ st.markdown("""
         letter-spacing: 0.2px;
     }
 
-    p, label, div, span {
-        color: #e8e8e8;
+    p, label, span, div {
+        color: #e5e7eb;
     }
 
     .hero {
-        background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
-        border: 1px solid #2f2f39;
-        border-radius: 20px;
-        padding: 1.3rem 1.4rem;
+        background: linear-gradient(135deg, #111111 0%, #171717 100%);
+        border: 1px solid #262626;
+        border-radius: 24px;
+        padding: 1.35rem 1.4rem;
         margin-bottom: 1rem;
     }
 
     .hero-title {
-        font-size: 2rem;
+        font-size: 2.1rem;
         font-weight: 800;
         color: #ffffff !important;
-        margin-bottom: 0.4rem;
+        margin-bottom: 0.35rem;
     }
 
     .hero-sub {
-        font-size: 1rem;
         color: #d1d5db !important;
+        font-size: 1rem;
         line-height: 1.5;
     }
 
     .section-card {
-        background: #12131a;
-        border: 1px solid #2b2d36;
-        border-radius: 18px;
-        padding: 1rem;
+        background: #111214;
+        border: 1px solid #26282d;
+        border-radius: 20px;
+        padding: 1.1rem;
         margin-bottom: 1rem;
     }
 
-    .info-card {
-        background: #151821;
-        border: 1px solid #343746;
-        border-radius: 16px;
-        padding: 0.9rem 1rem;
-        margin-bottom: 0.8rem;
-    }
-
-    .info-title {
-        font-weight: 800;
-        color: #ffffff !important;
-        margin-bottom: 0.25rem;
-    }
-
-    .info-text {
-        color: #d1d5db !important;
-        line-height: 1.45;
-        font-size: 0.96rem;
-    }
-
     .metric-card {
-        background: #12131a;
-        border: 1px solid #2b2d36;
-        border-radius: 16px;
-        padding: 0.9rem;
-        text-align: left;
+        background: #111214;
+        border: 1px solid #26282d;
+        border-radius: 18px;
+        padding: 1rem;
         height: 100%;
     }
 
     .metric-label {
-        font-size: 0.9rem;
         color: #cbd5e1 !important;
-        margin-bottom: 0.2rem;
+        font-size: 0.9rem;
         font-weight: 700;
+        margin-bottom: 0.3rem;
     }
 
     .metric-value {
-        font-size: 1.5rem;
-        font-weight: 800;
         color: #ffffff !important;
+        font-size: 1.55rem;
+        font-weight: 800;
+        margin-bottom: 0.35rem;
     }
 
     .metric-help {
-        font-size: 0.88rem;
         color: #aeb7c6 !important;
-        line-height: 1.35;
-        margin-top: 0.45rem;
-    }
-
-    .plan-card {
-        background: #12131a;
-        border: 1px solid #2b2d36;
-        border-radius: 18px;
-        padding: 1rem 1rem 0.8rem 1rem;
-        margin-top: 1rem;
-    }
-
-    .small-note {
-        color: #b8c0cc !important;
-        font-size: 0.93rem;
+        font-size: 0.9rem;
         line-height: 1.4;
     }
 
-    .stButton > button, .stFormSubmitButton > button {
-        background: #ffffff !important;
-        color: #0b0b0f !important;
-        border: none !important;
-        border-radius: 12px !important;
-        padding: 0.72rem 1.15rem !important;
-        font-weight: 800 !important;
+    .plan-card {
+        background: #111214;
+        border: 1px solid #26282d;
+        border-radius: 20px;
+        padding: 1.1rem;
+        margin-top: 1rem;
+    }
+
+    .note {
+        color: #b7bec9 !important;
+        font-size: 0.93rem;
+        line-height: 1.45;
+        margin-bottom: 0.8rem;
     }
 
     .stTextInput input,
     .stNumberInput input,
     .stTextArea textarea {
-        background-color: #0f1117 !important;
+        background: #0d0f14 !important;
         color: #ffffff !important;
-        border: 1px solid #343746 !important;
-        border-radius: 12px !important;
+        border: 1px solid #2f3440 !important;
+        border-radius: 14px !important;
     }
 
     div[data-baseweb="select"] > div {
-        background-color: #0f1117 !important;
+        background: #0d0f14 !important;
         color: #ffffff !important;
-        border: 1px solid #343746 !important;
-        border-radius: 12px !important;
+        border: 1px solid #2f3440 !important;
+        border-radius: 14px !important;
     }
 
     div[data-testid="stSlider"] {
-        padding-top: 0.2rem;
+        padding-top: 0.35rem;
+        padding-bottom: 0.2rem;
+    }
+
+    div[data-testid="stSlider"] [role="slider"] {
+        background-color: #ffffff !important;
+        border: 2px solid #ffffff !important;
+        box-shadow: none !important;
+    }
+
+    div[data-testid="stSlider"] > div {
+        color: #ffffff !important;
+    }
+
+    .stButton > button,
+    .stFormSubmitButton > button {
+        width: 100%;
+        background: #ffffff !important;
+        color: #111111 !important;
+        border: none !important;
+        border-radius: 14px !important;
+        padding: 0.85rem 1rem !important;
+        font-weight: 800 !important;
+        font-size: 1rem !important;
+        box-shadow: none !important;
+    }
+
+    .stButton > button:hover,
+    .stFormSubmitButton > button:hover {
+        background: #e5e7eb !important;
+        color: #000000 !important;
+    }
+
+    .stButton > button:disabled,
+    .stFormSubmitButton > button:disabled {
+        background: #d1d5db !important;
+        color: #111111 !important;
+        opacity: 1 !important;
     }
 
     details {
-        background: #12131a;
-        border: 1px solid #2b2d36;
+        background: #111214;
+        border: 1px solid #26282d;
         border-radius: 14px;
-        padding: 0.3rem 0.7rem;
+        padding: 0.4rem 0.75rem;
+    }
+
+    hr {
+        border-color: #23262d;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -228,14 +240,13 @@ You are a realistic fitness coach writing a plan inside a fitness app.
 Write a clean, easy-to-read response in markdown.
 
 Rules:
-- Be practical, not overly dramatic
-- Always include sets and reps for exercises
-- Always include exercise names clearly
+- Be practical and human
+- Always include sets and reps for every exercise
 - Use headings and bullet points
 - Keep formatting neat and readable
 - Make the plan realistic for the user's equipment, experience, and number of training days
 - Include a short summary first
-- Then include a workout plan by day
+- Then a workout plan by day
 - Then cardio
 - Then nutrition
 - Then recovery
@@ -270,19 +281,19 @@ Protein: {protein_low} to {protein_high} grams
 
 
 # -----------------------------
-# UI HEADER
+# HEADER
 # -----------------------------
 st.markdown("""
 <div class="hero">
     <div class="hero-title">🏋️ AI Fitness Agent</div>
     <div class="hero-sub">
-        Build a personalized workout, cardio, nutrition, and recovery plan with a cleaner and easier-to-read interface.
+        Build a personalized workout, cardio, nutrition, and recovery plan with a cleaner dark interface.
     </div>
 </div>
 """, unsafe_allow_html=True)
 
 st.markdown(
-    '<div class="small-note">This tool gives general fitness guidance. It is not medical advice.</div>',
+    '<div class="note">This tool gives general fitness guidance. It is not medical advice.</div>',
     unsafe_allow_html=True
 )
 
@@ -291,7 +302,7 @@ st.markdown(
 # FORM
 # -----------------------------
 with st.form("fitness_form"):
-    left, right = st.columns(2)
+    left, right = st.columns(2, gap="large")
 
     with left:
         st.markdown('<div class="section-card">', unsafe_allow_html=True)
@@ -319,8 +330,8 @@ with st.form("fitness_form"):
         st.markdown('</div>', unsafe_allow_html=True)
 
         st.markdown('<div class="section-card">', unsafe_allow_html=True)
-        st.subheader("Accessibility and Clarity")
-        st.caption("The app uses high-contrast colors, simple sections, and plain language explanations for the numbers below.")
+        st.subheader("Clarity")
+        st.caption("High-contrast colors, simpler sections, and plain language explanations are built into the app.")
         st.markdown('</div>', unsafe_allow_html=True)
 
     submitted = st.form_submit_button("Generate Plan")
@@ -336,14 +347,14 @@ if submitted:
 
     st.subheader("Your Numbers")
 
-    c1, c2, c3, c4 = st.columns(4)
+    c1, c2, c3, c4 = st.columns(4, gap="medium")
 
     with c1:
         st.markdown(f"""
         <div class="metric-card">
             <div class="metric-label">BMR</div>
             <div class="metric-value">{bmr}</div>
-            <div class="metric-help">Your estimated calories burned at rest just to keep your body functioning.</div>
+            <div class="metric-help">Estimated calories your body burns at rest to keep you alive and functioning.</div>
         </div>
         """, unsafe_allow_html=True)
 
@@ -352,7 +363,7 @@ if submitted:
         <div class="metric-card">
             <div class="metric-label">TDEE</div>
             <div class="metric-value">{tdee}</div>
-            <div class="metric-help">Your estimated daily calories after including normal activity and exercise.</div>
+            <div class="metric-help">Estimated total daily calories after normal activity and training are included.</div>
         </div>
         """, unsafe_allow_html=True)
 
@@ -361,7 +372,7 @@ if submitted:
         <div class="metric-card">
             <div class="metric-label">Target Calories</div>
             <div class="metric-value">{cal}</div>
-            <div class="metric-help">A practical daily calorie target based on your current goal.</div>
+            <div class="metric-help">A practical daily calorie goal based on whether you want to lose, build, or maintain.</div>
         </div>
         """, unsafe_allow_html=True)
 
@@ -370,7 +381,7 @@ if submitted:
         <div class="metric-card">
             <div class="metric-label">Protein</div>
             <div class="metric-value">{protein_low}-{protein_high}g</div>
-            <div class="metric-help">A solid daily protein range to support recovery, muscle retention, and progress.</div>
+            <div class="metric-help">A daily protein range to help support recovery, training, and muscle retention.</div>
         </div>
         """, unsafe_allow_html=True)
 
@@ -380,11 +391,11 @@ if submitted:
 It is the rough number of calories your body would burn even if you rested all day.
 
 **TDEE** is your Total Daily Energy Expenditure.  
-It adds your movement and activity on top of your BMR.
+It adds movement and activity on top of your BMR.
 
-**Target Calories** is the calorie goal the app uses based on whether you want to lose fat, build muscle, or maintain.
+**Target Calories** is the calorie goal based on your current goal.
 
-**Protein** is a daily range that helps support muscle recovery and overall training progress.
+**Protein** is a daily range that helps support recovery and progress.
 """)
 
     data = {
