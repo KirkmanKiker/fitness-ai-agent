@@ -7,18 +7,25 @@ import streamlit as st
 from openai import OpenAI
 
 
-# -------------------------------------------------
-# Page setup
-# -------------------------------------------------
+# =================================================
+# PAGE SETUP
+# =================================================
 st.set_page_config(
     page_title="AI Health & Fitness Planning Agent",
     page_icon="🏋️",
     layout="wide"
 )
 
-# -------------------------------------------------
-# Clean UI styling
-# -------------------------------------------------
+
+# =================================================
+# CONFIG
+# =================================================
+MODEL_NAME = "gpt-5.4-mini"
+
+
+# =================================================
+# UI STYLING
+# =================================================
 st.markdown("""
 <style>
     .stApp {
@@ -26,8 +33,8 @@ st.markdown("""
     }
 
     .block-container {
-        max-width: 1180px;
-        padding-top: 1.25rem;
+        max-width: 1200px;
+        padding-top: 1.2rem;
         padding-bottom: 2rem;
     }
 
@@ -37,17 +44,17 @@ st.markdown("""
 
     .hero-box {
         background: linear-gradient(135deg, #0f172a 0%, #1d4ed8 55%, #60a5fa 100%);
-        padding: 1.8rem 2rem;
-        border-radius: 22px;
+        padding: 1.9rem 2rem;
+        border-radius: 24px;
         margin-bottom: 1rem;
-        box-shadow: 0 10px 28px rgba(15, 23, 42, 0.14);
+        box-shadow: 0 12px 28px rgba(15, 23, 42, 0.14);
     }
 
     .hero-title {
         color: white !important;
-        font-size: 2.1rem;
+        font-size: 2.2rem;
         font-weight: 800;
-        margin-bottom: 0.35rem;
+        margin-bottom: 0.3rem;
     }
 
     .hero-sub {
@@ -58,9 +65,9 @@ st.markdown("""
 
     .hero-joke {
         color: #dbeafe !important;
-        font-size: 0.93rem;
+        font-size: 0.95rem;
         font-style: italic;
-        margin-top: 0.7rem;
+        margin-top: 0.65rem;
     }
 
     .section-card {
@@ -68,16 +75,16 @@ st.markdown("""
         border: 1px solid #dbeafe;
         border-left: 5px solid #2563eb;
         border-radius: 18px;
-        padding: 1rem 1rem 0.85rem 1rem;
+        padding: 1rem 1rem 0.9rem 1rem;
         margin-bottom: 1rem;
-        box-shadow: 0 5px 16px rgba(37, 99, 235, 0.07);
+        box-shadow: 0 6px 16px rgba(37, 99, 235, 0.07);
     }
 
     .result-intro {
         background: #eff6ff;
         border: 1px solid #bfdbfe;
         border-radius: 14px;
-        padding: 0.9rem 1rem;
+        padding: 0.95rem 1rem;
         font-weight: 600;
         color: #1e3a8a !important;
         margin-bottom: 1rem;
@@ -107,7 +114,7 @@ st.markdown("""
     .workout-day-title {
         color: #1d4ed8 !important;
         font-weight: 800;
-        font-size: 1.04rem;
+        font-size: 1.05rem;
         margin-bottom: 0.7rem;
     }
 
@@ -115,7 +122,7 @@ st.markdown("""
         background: white;
         border: 1px solid #e5e7eb;
         border-radius: 11px;
-        padding: 0.65rem 0.8rem;
+        padding: 0.68rem 0.8rem;
         margin-bottom: 0.45rem;
         color: #111827 !important;
         font-weight: 600;
@@ -124,13 +131,26 @@ st.markdown("""
     .summary-box {
         background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
         border-radius: 18px;
-        padding: 1.05rem 1.15rem;
+        padding: 1.1rem 1.15rem;
         margin-top: 0.75rem;
         box-shadow: 0 8px 22px rgba(15, 23, 42, 0.12);
     }
 
-    .summary-box * {
-        color: white !important;
+    .summary-box h1,
+    .summary-box h2,
+    .summary-box h3,
+    .summary-box h4,
+    .summary-box h5,
+    .summary-box h6,
+    .summary-box p,
+    .summary-box span,
+    .summary-box strong,
+    .summary-box li,
+    .summary-box ul,
+    .summary-box ol {
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
+        opacity: 1 !important;
     }
 
     .sidebar-box {
@@ -167,25 +187,35 @@ st.markdown("""
         font-weight: 800;
     }
 
-    .stButton > button, .stFormSubmitButton > button, .stDownloadButton > button {
+    .stButton > button,
+    .stFormSubmitButton > button,
+    .stDownloadButton > button {
         background: linear-gradient(135deg, #1d4ed8, #3b82f6) !important;
         color: white !important;
         border: none !important;
         border-radius: 14px !important;
-        padding: 0.72rem 1.2rem !important;
+        padding: 0.75rem 1.2rem !important;
         font-weight: 700 !important;
         box-shadow: 0 8px 18px rgba(37, 99, 235, 0.16) !important;
     }
 
-    .stTextInput input, .stNumberInput input, .stTextArea textarea {
+    .stTextInput input,
+    .stNumberInput input,
+    .stTextArea textarea {
         border-radius: 12px !important;
-        color: #111827 !important;
         background: white !important;
+        color: #111827 !important;
+        border: 1px solid #d1d5db !important;
+    }
+
+    .stTextArea textarea::placeholder {
+        color: #6b7280 !important;
     }
 
     div[data-baseweb="select"] > div {
         border-radius: 12px !important;
         background-color: #1f2937 !important;
+        border: 1px solid #d1d5db !important;
     }
 
     div[data-baseweb="select"] * {
@@ -199,6 +229,7 @@ st.markdown("""
 
     div[role="listbox"] {
         background-color: #1f2937 !important;
+        border: 1px solid #374151 !important;
     }
 
     div[role="option"] {
@@ -243,9 +274,9 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-# -------------------------------------------------
-# Friendly text
-# -------------------------------------------------
+# =================================================
+# FRIENDLY TEXT
+# =================================================
 def get_fun_greeting():
     return random.choice([
         "Hi, welcome back.",
@@ -286,9 +317,9 @@ def get_results_intro(name, goal):
     return intros.get(goal, f"Nice, {person}. Here’s your personalized plan.")
 
 
-# -------------------------------------------------
-# OpenAI integration
-# -------------------------------------------------
+# =================================================
+# OPENAI
+# =================================================
 def get_openai_client():
     api_key = None
 
@@ -303,7 +334,7 @@ def get_openai_client():
     return OpenAI(api_key=api_key)
 
 
-def build_openai_prompt(profile, analysis, verification):
+def build_bob_prompt(profile, analysis, verification):
     workout_text = ""
     for day, exercises in analysis["detailed_workout"].items():
         workout_text += f"{day}\n"
@@ -312,13 +343,21 @@ def build_openai_prompt(profile, analysis, verification):
         workout_text += "\n"
 
     return f"""
-You are improving a fitness app output.
+You are Coach Bob, a funny but encouraging gym coach inside a fitness app.
 
-Rewrite this plan so it sounds natural, human, and realistic.
-Keep it simple and clear.
-Do not change calories, protein, or exercises.
-If injuries exist, add a small safety note.
-End with one short motivating sentence.
+Rewrite this plan so it sounds:
+- natural
+- supportive
+- slightly funny in a gym-buddy way
+- still clear and useful
+
+Rules:
+- Keep it simple and readable
+- Do not change calories, protein, or exercises
+- If injuries exist, add a short safety note
+- Keep the humor light, not corny or long
+- End with one short motivating sentence
+- Sound like a coach who wants the user to do well, not like a robot
 
 User:
 Name: {profile.name if profile.name.strip() else "User"}
@@ -341,17 +380,17 @@ Summary:
 """.strip()
 
 
-def generate_openai_summary(profile, analysis, verification):
+def generate_bob_summary(profile, analysis, verification):
     client = get_openai_client()
 
     if client is None:
         return None
 
-    prompt = build_openai_prompt(profile, analysis, verification)
+    prompt = build_bob_prompt(profile, analysis, verification)
 
     try:
         response = client.responses.create(
-            model="gpt-5.4-mini",
+            model=MODEL_NAME,
             input=prompt
         )
         return response.output_text
@@ -359,9 +398,9 @@ def generate_openai_summary(profile, analysis, verification):
         return f"OpenAI error: {e}"
 
 
-# -------------------------------------------------
-# Utility helpers
-# -------------------------------------------------
+# =================================================
+# UTILITY HELPERS
+# =================================================
 def calculate_bmr(weight_lbs, height_ft, height_in, age, sex):
     weight_kg = weight_lbs * 0.453592
     total_inches = (height_ft * 12) + height_in
@@ -915,9 +954,9 @@ def build_workout_plan(training_days, equipment, workout_time, injury_keywords, 
     return workout_days
 
 
-# -------------------------------------------------
-# Data model and agents
-# -------------------------------------------------
+# =================================================
+# DATA MODEL AND AGENTS
+# =================================================
 @dataclass
 class UserProfile:
     name: str
@@ -1098,9 +1137,9 @@ class ControllerAgent:
         }
 
 
-# -------------------------------------------------
-# Hero
-# -------------------------------------------------
+# =================================================
+# HERO
+# =================================================
 hero_greeting = get_fun_greeting()
 hero_joke = get_fun_joke()
 
@@ -1116,9 +1155,9 @@ st.markdown(f"""
 """, unsafe_allow_html=True)
 
 
-# -------------------------------------------------
-# Sidebar
-# -------------------------------------------------
+# =================================================
+# SIDEBAR
+# =================================================
 with st.sidebar:
     st.markdown("## Quick Summary")
     st.markdown(
@@ -1126,7 +1165,7 @@ with st.sidebar:
         unsafe_allow_html=True
     )
     st.markdown(
-        '<div class="sidebar-box"><strong>Best features</strong><br>Detailed workouts<br>Injury-aware substitutions<br>Weekly check-in advice<br>Goal timeline estimate<br>ChatGPT enhanced summary</div>',
+        '<div class="sidebar-box"><strong>Best features</strong><br>Detailed workouts<br>Injury-aware substitutions<br>Weekly check-in advice<br>Goal timeline estimate<br>Coach Bob advice</div>',
         unsafe_allow_html=True
     )
     st.markdown(
@@ -1135,9 +1174,9 @@ with st.sidebar:
     )
 
 
-# -------------------------------------------------
-# Form
-# -------------------------------------------------
+# =================================================
+# FORM
+# =================================================
 with st.form("fitness_form"):
     left, right = st.columns(2)
 
@@ -1231,9 +1270,9 @@ with st.form("fitness_form"):
     submitted = st.form_submit_button("Generate My Plan")
 
 
-# -------------------------------------------------
-# Results
-# -------------------------------------------------
+# =================================================
+# RESULTS
+# =================================================
 if submitted:
     target_weight_value = None if target_weight == 0 else float(target_weight)
 
@@ -1269,7 +1308,7 @@ if submitted:
     plan = result["plan"]
     analysis = result["analysis"]
     verification = result["verification"]
-    openai_summary = generate_openai_summary(profile, analysis, verification)
+    bob_summary = generate_bob_summary(profile, analysis, verification)
 
     intro_text = get_results_intro(name, goal)
     motivation_text = get_goal_motivation(goal)
@@ -1308,10 +1347,10 @@ if submitted:
     st.caption(analysis["calorie_note"])
     st.markdown('</div>', unsafe_allow_html=True)
 
-    if openai_summary:
+    if bob_summary:
         st.markdown('<div class="section-card">', unsafe_allow_html=True)
-        st.subheader("✨ ChatGPT Enhanced Summary")
-        st.markdown(openai_summary)
+        st.subheader("🏋️ Coach Bob’s Advice")
+        st.markdown(bob_summary)
         st.markdown('</div>', unsafe_allow_html=True)
 
     col1, col2 = st.columns(2)
