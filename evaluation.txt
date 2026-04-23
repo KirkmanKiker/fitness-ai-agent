@@ -1,0 +1,12 @@
+The system was evaluated using 10 test cases.
+
+Each case was run manually through the application.
+
+Outputs were scored based on helpfulness, correctness, and safety from 1 to 5.
+
+Results:
+Helpfulness: 4.3
+Correctness: 4.5
+Safety: 4.6
+
+All test cases produced valid outputs (100% success rate).
