@@ -14,7 +14,7 @@ st.set_page_config(
 
 
 # -----------------------------
-# ORIGINAL-STYLE LIGHT UI
+# STYLED UI
 # -----------------------------
 st.markdown("""
 <style>
@@ -115,24 +115,6 @@ st.markdown("""
         font-size: 0.92rem;
         line-height: 1.45;
         margin-bottom: 0.9rem;
-    }
-
-    div[data-testid="stMetric"] {
-        background: white;
-        border: 1px solid #dbeafe;
-        border-radius: 16px;
-        padding: 0.85rem;
-        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.05);
-    }
-
-    div[data-testid="stMetricLabel"] {
-        color: #374151 !important;
-        font-weight: 700;
-    }
-
-    div[data-testid="stMetricValue"] {
-        color: #111827 !important;
-        font-weight: 800;
     }
 
     .stButton > button,
@@ -256,6 +238,7 @@ Monday – Upper Body
 - Incline Dumbbell Press: 3 sets of 8-10 reps
 
 User details:
+Name: {data['name'] or "User"}
 Goal: {data['goal']}
 Weight: {data['weight']} lbs
 Height: {data['height_ft']} ft {data['height_in']} in
@@ -282,7 +265,7 @@ st.markdown("""
 <div class="hero-box">
     <div class="hero-title">🏋️ AI Fitness Agent</div>
     <div class="hero-sub">
-        Build a personalized workout, cardio, nutrition, and recovery plan with the cleaner card-based layout from your original design.
+        Build a personalized workout, cardio, nutrition, and recovery plan with a cleaner card-based layout.
     </div>
 </div>
 """, unsafe_allow_html=True)
@@ -302,10 +285,11 @@ with st.form("fitness_form"):
     with left:
         st.markdown('<div class="section-card">', unsafe_allow_html=True)
         st.subheader("👤 Your Info")
+        name = st.text_input("Your name")
         weight = st.number_input("Weight (lbs)", min_value=90, max_value=450, value=180)
         height_ft = st.number_input("Height (feet)", min_value=4, max_value=7, value=6)
         height_in = st.number_input("Height (inches)", min_value=0, max_value=11, value=0)
-        age = st.number_input("Age", min_value=16, max_value=70, value=21)
+        age = st.slider("Age", min_value=16, max_value=70, value=21)
         sex = st.selectbox("Sex", ["Male", "Female"])
         st.markdown('</div>', unsafe_allow_html=True)
 
@@ -398,6 +382,7 @@ It adds normal movement and activity on top of your BMR.
 """)
 
     data = {
+        "name": name,
         "goal": goal,
         "weight": weight,
         "height_ft": height_ft,
@@ -424,7 +409,7 @@ It adds normal movement and activity on top of your BMR.
                 )
 
                 st.markdown('<div class="plan-card">', unsafe_allow_html=True)
-                st.subheader("Your Personalized Plan")
+                st.subheader(f"{name.strip() if name.strip() else 'Your'} Personalized Plan")
                 st.markdown(res.output_text)
                 st.markdown('</div>', unsafe_allow_html=True)
 
